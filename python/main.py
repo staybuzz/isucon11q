@@ -835,17 +835,15 @@ def is_valid_condition_format(condition_str: str) -> bool:
 
     return idx_cond_str == len(condition_str)
 
-app.wsgi_app = LineProfilerMiddleware(app.wsgi_app)
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=getenv("SERVER_APP_PORT", 3000), threaded=True)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=getenv("SERVER_APP_PORT", 3000), threaded=True)
-
-# if __name__ == '__main__':
-#     filters = [
-#         FilenameFilter("main.py"),
-#         lambda stats: filter(lambda stat: stat.total_time > 0.0001, stats),
-#     ]
-#     app.config['PROFILE'] = True
-#     with open("lineprof.log", "w") as f:
-#         app.wsgi_app = LineProfilerMiddleware(app.wsgi_app, stream=f, filters=filters)
-#         app.run(host="0.0.0.0", port=getenv("SERVER_APP_PORT", 3000), threaded=True)
+if __name__ == '__main__':
+    filters = [
+        FilenameFilter("main.py"),
+        lambda stats: filter(lambda stat: stat.total_time > 0.0001, stats),
+    ]
+    app.config['PROFILE'] = True
+    with open("lineprof.log", "w") as f:
+        app.wsgi_app = LineProfilerMiddleware(app.wsgi_app, stream=f, filters=filters)
+        app.run(host="0.0.0.0", port=getenv("SERVER_APP_PORT", 3000), threaded=True)
