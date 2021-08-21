@@ -10,6 +10,18 @@
 # this is only for the mysqld standalone daemon
 [mysqld]
 
+# for isucon
+query_cache_type        = 1
+query_cache_limit	= 2M
+query_cache_size        = 32M
+max_connections=10000
+innodb_buffer_pool_size = 1GB
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+innodb_buffer_pool_dump_pct  = 100
+innodb_buffer_pool_dump_at_shutdown= 1
+innodb_buffer_pool_load_at_startup = 1
+
 #
 # * Basic Settings
 #
@@ -45,7 +57,7 @@ bind-address            = 127.0.0.1
 # * Query Cache Configuration
 #
 #query_cache_limit      = 1M
-query_cache_size        = 16M
+#query_cache_size        = 16M
 
 #
 # * Logging and Replication
