@@ -3,6 +3,7 @@ import base64
 import os
 import pathlib
 
+# 環境にあわせて変えて！！！！
 dbparams = {
     'host': 'localhost',
     'user': 'isucon',
@@ -22,7 +23,7 @@ try:
 
     for r in result:
         print("id: %s, jia_user_id: %s, jia_isu_uuid: %s" % (r['id'], r['jia_user_id'], r['jia_isu_uuid']))
-        if not r['image']: 
+        if not r['image']:
             print("image not found")
             continue
         icon_dir = os.path.join(str(static_folder), '../public/icons', r['jia_user_id'])
