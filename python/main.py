@@ -1,4 +1,5 @@
-from os import getenv
+from os import getenv, makedirs
+import os.path
 from subprocess import call
 from dataclasses import dataclass
 import json
@@ -29,7 +30,7 @@ JIA_JWT_SIGNING_KEY_PATH = "../ec256-public.pem"
 DEFAULT_ICON_FILE_PATH = "../NoImage.jpg"
 DEFAULT_JIA_SERVICE_URL = "http://localhost:5000"
 MYSQL_ERR_NUM_DUPLICATE_ENTRY = 1062
-
+ICON_DIR = "../public/icons"
 
 class CONDITION_LEVEL(str, Enum):
     INFO = "info"
@@ -343,14 +344,25 @@ def post_isu():
     isu_name = request.form.get("isu_name")
     image = request.files.get("image")
 
+    icon_dir_userid = os.path.join(ICON_DIR, jia_user_id)
+    if not os.path.exists(icon_dir_userid):
+        os.makedirs(icon_dir_userid)
+
+    icon_path = os.path.join(icon_dir_userid, jia_isu_uuid)
+
     if image is None:
         use_default_image = True
 
     if use_default_image:
         with open(DEFAULT_ICON_FILE_PATH, "rb") as f:
             image = f.read()
+
     else:
         image = image.read()
+
+    # 画像をファイルに書き出す
+    with open(icon_path, 'wb') as f:
+        f.write(image)
 
     cnx = cnxpool.connect()
     try:
@@ -360,10 +372,10 @@ def post_isu():
         try:
             query = """
                 INSERT
-                INTO `isu` (`jia_isu_uuid`, `name`, `image`, `jia_user_id`)
-                VALUES (%s, %s, %s, %s)
+                INTO `isu` (`jia_isu_uuid`, `name`, `jia_user_id`)
+                VALUES (%s, %s, %s)
                 """
-            cur.execute(query, (jia_isu_uuid, isu_name, image, jia_user_id))
+            cur.execute(query, (jia_isu_uuid, isu_name, jia_user_id))
         except mysql.connector.errors.IntegrityError as e:
             if e.errno == MYSQL_ERR_NUM_DUPLICATE_ENTRY:
                 abort(409, "duplicated: isu")
@@ -422,13 +434,22 @@ def get_isu_id(jia_isu_uuid):
 def get_isu_icon(jia_isu_uuid):
     """ISUのアイコンを取得"""
     jia_user_id = get_user_id_from_session()
+    icon_path = os.path.join(ICON_DIR, jia_user_id, jia_isu_uuid)
 
-    query = "SELECT `image` FROM `isu` WHERE `jia_user_id` = %s AND `jia_isu_uuid` = %s"
-    res = select_row(query, (jia_user_id, jia_isu_uuid))
-    if res is None:
+    # TODO: jia_isu_uuid をもとにfilereadをして、それをレスポンスしてみる
+    # cache-controlをここに書くか、nginxでproxy_cache_validを設定すればキャッシュできるか？
+    if os.path.exists(icon_path) is None:
         raise NotFound("not found: isu")
 
-    return make_response(res["image"], 200, {"Content-Type": "image/jpeg"})
+    # アイコンファイルの読み込み
+    with open(icon_path, 'rb') as f:
+        image = f.read()
+
+    #query = "SELECT `image` FROM `isu` WHERE `jia_user_id` = %s AND `jia_isu_uuid` = %s"
+    #res = select_row(query, (jia_user_id, jia_isu_uuid))
+
+    #return make_response(res["image"], 200, {"Content-Type": "image/jpeg"})
+    return make_response(image, 200, {"Content-Type": "image/jpeg"})
 
 
 @app.route("/api/isu/<jia_isu_uuid>/graph", methods=["GET"])
