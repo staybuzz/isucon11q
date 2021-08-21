@@ -737,7 +737,7 @@ def post_isu_condition(jia_isu_uuid):
     try:
         req = [PostIsuConditionRequest(**row) for row in request.json]
     except:
-        raise InternalServerError("bad request body")
+        raise BadRequest("bad request body")
 
     cnx = cnxpool.connect()
     try:
@@ -748,7 +748,7 @@ def post_isu_condition(jia_isu_uuid):
         cur.execute(query, (jia_isu_uuid,))
         count = cur.fetchone()["cnt"]
         if count == 0:
-            raise NotFound("not found: isu")
+            raise InternalServerError("not found: isu")
 
         for cond in req:
             if not is_valid_condition_format(cond.condition):
