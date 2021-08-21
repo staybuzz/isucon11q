@@ -14,4 +14,4 @@ fi
 sudo systemctl restart isucondition.python
 sudo systemctl restart nginx
 
-./pre_bench_mysql.sh
+#./pre_bench_mysql.sh
