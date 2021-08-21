@@ -445,7 +445,7 @@ def get_isu_graph(jia_isu_uuid):
         raise BadRequest("bad format: datetime")
     dt = truncate_datetime(dt, timedelta(hours=1))
 
-    query = "SELECT COUNT(*) FROM `isu` WHERE `jia_user_id` = %s AND `jia_isu_uuid` = %s"
+    query = "SELECT COUNT(id) FROM `isu` WHERE `jia_user_id` = %s AND `jia_isu_uuid` = %s"
     (count,) = select_row(query, (jia_user_id, jia_isu_uuid), dictionary=False)
     if count == 0:
         raise NotFound("not found: isu")
@@ -744,7 +744,7 @@ def post_isu_condition(jia_isu_uuid):
         cnx.start_transaction()
         cur = cnx.cursor(dictionary=True)
 
-        query = "SELECT COUNT(*) AS cnt FROM `isu` WHERE `jia_isu_uuid` = %s"
+        query = "SELECT COUNT(id) AS cnt FROM `isu` WHERE `jia_isu_uuid` = %s"
         cur.execute(query, (jia_isu_uuid,))
         count = cur.fetchone()["cnt"]
         if count == 0:
