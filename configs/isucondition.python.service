@@ -9,6 +9,8 @@ EnvironmentFile=/home/isucon/env.sh
 User=isucon
 Group=isucon
 ExecStart=/home/isucon/local/python/bin/uwsgi --ini uwsgi.ini
+StandardOutput=null
+StandardError=null
 
 Restart   = always
 Type      = simple
