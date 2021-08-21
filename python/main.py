@@ -752,7 +752,7 @@ def post_isu_condition(jia_isu_uuid):
 
         for cond in req:
             if not is_valid_condition_format(cond.condition):
-                raise BadRequest("bad request body")
+                raise InternalServerError("bad request body")
 
             query = """
                 INSERT
