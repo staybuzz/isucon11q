@@ -11,3 +11,8 @@ export LANG="C.UTF-8"
 cd $CURRENT_DIR
 
 cat 0_Schema.sql 1_InitData.sql 99_tuning.sql | mysql --defaults-file=/dev/null -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER $MYSQL_DBNAME
+
+pushd ~isucon/webapp/python
+rm -rf ../public/icons
+sudo -E -uisucon /home/isucon/local/python/bin/python icon_from_db.py
+popd

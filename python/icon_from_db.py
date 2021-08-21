@@ -5,7 +5,7 @@ import pathlib
 
 # 環境にあわせて変えて！！！！
 dbparams = {
-    'host': 'localhost',
+    'host': '192.168.0.12',
     'user': 'isucon',
     'password': 'isucon',
     'database': 'isucondition',

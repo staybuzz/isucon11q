@@ -438,7 +438,7 @@ def get_isu_icon(jia_isu_uuid):
 
     # TODO: jia_isu_uuid をもとにfilereadをして、それをレスポンスしてみる
     # cache-controlをここに書くか、nginxでproxy_cache_validを設定すればキャッシュできるか？
-    if os.path.exists(icon_path) is None:
+    if not os.path.exists(icon_path):
         raise NotFound("not found: isu")
 
     # アイコンファイルの読み込み
