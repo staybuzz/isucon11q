@@ -5,10 +5,10 @@ cd $APP_ROOT
 
 # update repo
 #git pull origin master
-git pull origin develop
+#git pull origin develop
 
 # nginx
-#sudo cp -r configs/nginx /etc/nginx
+sudo cp -r configs/nginx/* /etc/nginx/
 
 
 # mysql
@@ -16,12 +16,12 @@ git pull origin develop
 sudo cp -r configs/mysql/* /etc/mysql/
 
 # sysctl
-sudo cp sysctl.conf /etc/sysctl.conf
+sudo cp configs/sysctl.conf /etc/sysctl.conf
 sudo sysctl -p
 
 # service
-sudo cp isucondition.python.service /etc/systemd/system/isucondition.python.service
+sudo cp configs/isucondition.python.service /etc/systemd/system/isucondition.python.service
 sudo systemctl daemon-reload
 
 # log-lotate and restart services
-./pre_bench.sh
+sudo ./pre_bench.sh
