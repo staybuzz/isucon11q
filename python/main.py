@@ -840,11 +840,11 @@ def is_valid_condition_format(condition_str: str) -> bool:
 #     app.run(host="0.0.0.0", port=getenv("SERVER_APP_PORT", 3000), threaded=True)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=3000)
+    app.run(host="0.0.0.0", port=getenv("SERVER_APP_PORT", 3000), threaded=True)
     app.config['PROFILE'] = True
     filters = [
-        FilenameFilter("app.py"),
-        lambda stats: filter(lambda stat: stat.total_time > 0.0001, stats),
+        FilenameFilter("main.py"),
+        lambda stats: filter(lambda stat: stat.total_time > 0.001, stats),
     ]
     with open("lineprof.log", "w") as f:
         app.wsgi_app = LineProfilerMiddleware(app.wsgi_app, stream=f, filters=filters)
