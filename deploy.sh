@@ -7,12 +7,12 @@ cd $APP_ROOT
 git pull origin master
 
 # nginx
-sudo cp -r configs/nginx /etc/nginx
+#sudo cp -r configs/nginx /etc/nginx
 
 
 # mysql
 #sudo cp configs/mysql/my.cnf /etc/mysql/my.cnf
-sudo cp configs/mysql /etc/mysql
+sudo cp -r configs/mysql/* /etc/mysql/
 
 # log-lotate and restart services
-./pre_bench.sh
+#./pre_bench.sh

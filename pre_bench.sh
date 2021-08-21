@@ -11,5 +11,5 @@ fi
 sudo systemctl restart mysql
 # sudo service memcached restart
 # bundle install
-sudo systemctl restart niita_ruby
+sudo systemctl restart isucondition.python
 sudo systemctl restart nginx
